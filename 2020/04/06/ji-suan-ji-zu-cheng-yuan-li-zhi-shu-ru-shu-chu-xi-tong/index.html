@@ -1,0 +1,1931 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="计算机组成原理,输入输出系统,IO">
+    <meta name="description" content="网络空间安全 | HIT | 考研ing">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="baidu-site-verification" content="code-1URcYWuZN0" />
+    <meta name="google-site-verification" content="J0ppNTnqv5-qxgb2kJ0wk0wRuBAnfWI5Pbrfv0IQmGo" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>计算机组成原理之输入输出系统 | 恰醋的小屋</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/css/my.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="恰醋的小屋" type="application/atom+xml">
+</head>
+
+
+
+   <style>
+    body{
+       background-image: url(https://cdn.jsdelivr.net/gh/qiacu/blog-imgs/img/04.jpg);
+       background-repeat:no-repeat;
+       background-size:cover;
+       background-attachment:fixed;
+    }
+</style>
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">恰醋的小屋</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>时间轴</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="" class="waves-effect waves-light">
+
+      
+      <i class="fas fa-smile" style="zoom: 0.6;"></i>
+      
+      <span>空间</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
+    </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/about">
+          
+          <i class="fas fa-user-circle" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>关于我</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/bb">
+          
+          <i class="fas fa-bullhorn" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>碎碎念</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">恰醋的小屋</div>
+        <div class="logo-desc">
+            
+            网络空间安全 | HIT | 考研ing
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			时间轴
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="javascript:;">
+			
+				<i class="fa-fw fas fa-smile"></i>
+			
+			空间
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
+		</a>
+            <ul  style="background:  ;" >
+              
+                <li>
+
+                  <a href="/about " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-user-circle" style="position: absolute;left:50px" ></i>
+			      
+		          <span>关于我</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/bb " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-bullhorn" style="position: absolute;left:50px" ></i>
+			      
+		          <span>碎碎念</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+<script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/medias/featureimages/23.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">计算机组成原理之输入输出系统</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E7%AC%94%E8%AE%B0/">
+                                <span class="chip bg-color">笔记</span>
+                            </a>
+                        
+                            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">
+                                <span class="chip bg-color">计算机组成原理</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" class="post-category">
+                                计算机组成原理
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-04-06
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2021-02-14
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.9k
+                </div>
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="英文缩写的中文含义"><a href="#英文缩写的中文含义" class="headerlink" title="英文缩写的中文含义"></a>英文缩写的中文含义</h1><ul>
+<li>DMA：内存直接访问</li>
+<li>DBR：接口内的数据缓冲寄存器</li>
+<li>INTR：接口内的中断请求触发器</li>
+<li>MASK：接口内的屏蔽触发器</li>
+<li>SEL：Select，设备选择电路发出的选择信号</li>
+<li>EINT：允许中断触发器</li>
+<li>AR：地址寄存器</li>
+<li>WC：字计数器</li>
+<li>DAR：设备地址寄存器</li>
+<li>HRQ：DMA控制逻辑向CPU发出的总线使用请求信号</li>
+<li>HLDA：CPU给DMA控制逻辑的应答信号</li>
+<li>DACK：DMA控制逻辑对设备给出的应答信号</li>
+<li>DREQ：外部设备向DMA控制逻辑发出的请求信号</li>
+<li>BR：数据缓冲器</li>
+</ul>
+<h1 id="输入输出系统的发展概况"><a href="#输入输出系统的发展概况" class="headerlink" title="输入输出系统的发展概况"></a>输入输出系统的发展概况</h1><h2 id="1-早期阶段"><a href="#1-早期阶段" class="headerlink" title="1. 早期阶段"></a>1. 早期阶段</h2><ul>
+<li>早期I/O设备种类较少，I/O设备与主机交换信息都必须通过CPU；</li>
+<li><strong>分散连接</strong></li>
+<li>CPU与I/O<strong>串行</strong>工作，使用<strong>程序查询方式</strong>传送信息</li>
+</ul>
+<pre class="line-numbers language-mermaid" data-language="mermaid"><code class="language-mermaid">graph LR
+A[存储器]--&gt;CPU
+CPU--&gt;B1[I/O1]
+B1--&gt;CPU
+CPU--&gt;A
+CPU--&gt;B2[I/O2]
+B2--&gt;CPU
+CPU--&gt;B3[....]
+B3--&gt;CPU
+CPU--&gt;B4[I/On]
+B4--&gt;CPU<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="2-接口模块和DMA阶段"><a href="#2-接口模块和DMA阶段" class="headerlink" title="2. 接口模块和DMA阶段"></a>2. 接口模块和DMA阶段</h2><ul>
+<li>IO设备通过<strong>接口模块</strong>与主机连接，采用总线结构（接口见后面）</li>
+<li>CPU与IO设备并行工作，有中断方式和DMA方式</li>
+<li>缺点：增加了硬件成本，使控制变得十分复杂；对众多的DMA进行管理，会占用CPU的工作时间，直接影响CPU的整体工作效率。</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTEzMDUwNGY0YmNiMDQ1YWIwZTkucG5n?x-oss-process=image/format,png"></p>
+<h2 id="3-具有通道结构的阶段"><a href="#3-具有通道结构的阶段" class="headerlink" title="3. 具有通道结构的阶段"></a>3. 具有通道结构的阶段</h2><ul>
+<li>适用于大、中型计算机系统</li>
+<li>通道负责管理IO设备以及实现主存与IO设备之间交换信息，能够独立的执行通道指令所编写的输入输出程序</li>
+<li>通道受CPU的IO指令启动、停止或改变其工作状态</li>
+<li>CPU不直接参与管理IO设备，故CPU的资源利用率更高</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE1YTUwNGY0YmNiMDQ1YWU5NDUucG5n?x-oss-process=image/format,png"></p>
+<h2 id="4-具有I-O处理机的阶段"><a href="#4-具有I-O处理机的阶段" class="headerlink" title="4. 具有I/O处理机的阶段"></a>4. 具有I/O处理机的阶段</h2><ul>
+<li>IO处理机独立于主机工作，既可完成IO通道对IO的控制，又可以完成码制变换、格式处理、数据块检错、纠错等操作</li>
+<li>与CPU工作的并行性更高</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE2MDUwNGY0YmNiMDQ1YWVmN2YucG5n?x-oss-process=image/format,png"></p>
+<blockquote>
+<p>从早期到I/O处理机时期，外部设备的独立性越来越高。</p>
+</blockquote>
+<h1 id="输入输出系统的组成"><a href="#输入输出系统的组成" class="headerlink" title="输入输出系统的组成"></a>输入输出系统的组成</h1><p>组成：硬件和软件两部分。</p>
+<h2 id="1-软件"><a href="#1-软件" class="headerlink" title="1. 软件"></a>1. 软件</h2><h3 id="1-1-主要任务"><a href="#1-1-主要任务" class="headerlink" title="1.1 主要任务"></a>1.1 主要任务</h3><ul>
+<li>将用户编制的程序或数据输入至主机</li>
+<li>将运算结果输送给用户</li>
+<li>实现I/O系统与主机工作的协调</li>
+</ul>
+<h3 id="1-2-I-O指令"><a href="#1-2-I-O指令" class="headerlink" title="1.2 I/O指令"></a>1.2 I/O指令</h3><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE2NTUwNGY0YmNiMDQ1YWY0ZGYucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li>操作码：标志位</li>
+<li>命令码：<ul>
+<li>将数据从IO输入主机</li>
+<li>将数据从主机输出IO</li>
+<li>状态测试</li>
+<li>形成某些操作命令</li>
+</ul>
+</li>
+<li>设备码：地址编码</li>
+<li>IO指令是CPU指令的一部分，用来控制外部设备，由CPU译码后执行</li>
+</ul>
+<h3 id="1-3-通道指令"><a href="#1-3-通道指令" class="headerlink" title="1.3 通道指令"></a>1.3 通道指令</h3><ul>
+<li>是对具有通道的IO系统专门设置的指令</li>
+<li>一般用于指明参与传送的数据组的首地址、传送字数、操作命令等</li>
+<li>通道指令是通道用于执行IO操作的指令，可以存放在主存，由通道取出并执行</li>
+<li><strong>通道程序</strong>由通道指令组成，完成某种外围设备与主存传送信息的操作</li>
+</ul>
+<h2 id="2-硬件"><a href="#2-硬件" class="headerlink" title="2. 硬件"></a>2. 硬件</h2><ul>
+<li>设备&lt;——&gt;I/O接口</li>
+<li>设备&lt;——&gt;设备控制器&lt;——&gt;通道</li>
+</ul>
+<h1 id="I-O设备与主机的联系方式"><a href="#I-O设备与主机的联系方式" class="headerlink" title="I/O设备与主机的联系方式"></a>I/O设备与主机的联系方式</h1><h2 id="1-I-O编址方式"><a href="#1-I-O编址方式" class="headerlink" title="1. I/O编址方式"></a>1. I/O编址方式</h2><p>通常将IO设备码视为地址码，对IO地址码有两种编址方式</p>
+<ul>
+<li>统一编址：将IO地址看作是存储器地址的一部分</li>
+<li>不统一编址（独立编址）：有专门的IO指令</li>
+</ul>
+<h2 id="2-设备寻址"><a href="#2-设备寻址" class="headerlink" title="2. 设备寻址"></a>2. 设备寻址</h2><p>每台设备都赋予一个设备号，因此可以用I/O指令的设备码字段直接指出该设备的设备号。通过接口电路中的<strong>设备选择电路</strong>，便可选中要交换信息的设备。</p>
+<h2 id="3-传送方式"><a href="#3-传送方式" class="headerlink" title="3. 传送方式"></a>3. 传送方式</h2><ul>
+<li><strong>串行传送</strong>：同一瞬间只传送一位信息</li>
+<li><strong>并行传送</strong>：同一瞬间传送n位信息</li>
+</ul>
+<h2 id="4-联络方式"><a href="#4-联络方式" class="headerlink" title="4. 联络方式"></a>4. 联络方式</h2><p>IO设备与主机之间必须了解彼此当时所处的状态。</p>
+<h3 id="4-1-立即响应方式"><a href="#4-1-立即响应方式" class="headerlink" title="4.1 立即响应方式"></a>4.1 立即响应方式</h3><ul>
+<li>只要CPU的I/O指令一到，I/O设备就立即响应</li>
+<li>无需特殊联络信号</li>
+<li>适用于工作速度缓慢的I/O设备</li>
+</ul>
+<h3 id="4-2-异步工作采用应答信号联络"><a href="#4-2-异步工作采用应答信号联络" class="headerlink" title="4.2 异步工作采用应答信号联络"></a>4.2 异步工作采用应答信号联络</h3><ul>
+<li>在交换信息前，IO与CPU各自完成自身的任务，一旦出现联络信号，彼此才准备交换信息</li>
+<li>适用于IO设备与主机工作速度不匹配的情况</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE2NzUwNGY0YmNiMDQ1YWY3OWQucG5n?x-oss-process=image/format,png"></p>
+<h3 id="4-3-同步工作采用同步时标联络"><a href="#4-3-同步工作采用同步时标联络" class="headerlink" title="4.3 同步工作采用同步时标联络"></a>4.3 同步工作采用同步时标联络</h3><p>要求I/O设备与CPU的工作速度完全同步，这种联络互相之间还得配有专用电路，用以产生<strong>同步时标来控制同步工作</strong>。</p>
+<h2 id="5-I-O与主机的连接方式"><a href="#5-I-O与主机的连接方式" class="headerlink" title="5. I/O与主机的连接方式"></a>5. I/O与主机的连接方式</h2><h3 id="5-1-辐射式连接"><a href="#5-1-辐射式连接" class="headerlink" title="5.1 辐射式连接"></a>5.1 辐射式连接</h3><pre class="line-numbers language-mermaid" data-language="mermaid"><code class="language-mermaid">graph LR;
+A[主机]--&gt;B[外设1]
+B--&gt;A
+A--&gt;C[外设2]
+C--&gt;A
+A--&gt;D[外设3]
+D--&gt;A<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>每台设备都配有一套控制线路和一组信号线</li>
+<li>缺点：不便于增删设备</li>
+</ul>
+<h3 id="5-2-总线连接"><a href="#5-2-总线连接" class="headerlink" title="5.2 总线连接"></a>5.2 总线连接</h3><ul>
+<li>便于增删设备</li>
+</ul>
+<h1 id="I-O接口"><a href="#I-O接口" class="headerlink" title="I/O接口"></a>I/O接口</h1><blockquote>
+<p>I/O接口通常是指主机与外部设备之间设置的一个硬件电路及其相应的软件控制。</p>
+<p>它是一组电子电路，由若干专用寄存器和相应的控制逻辑电路构成，是CPU和I/O设备之间交换信息的媒介和桥梁</p>
+</blockquote>
+<h2 id="1-为什么要设置接口"><a href="#1-为什么要设置接口" class="headerlink" title="1. 为什么要设置接口"></a>1. 为什么要设置接口</h2><ul>
+<li>实现设备的选择：设备选择电路</li>
+<li>实现数据缓冲达到速度匹配：DBR</li>
+<li>实现数据串-并格式转换</li>
+<li>实现电平控制</li>
+<li>传送控制命令：命令寄存器、命令译码器</li>
+<li>反映设备的状态（“忙”、“就绪”、“中断请求”）：设备状态标记</li>
+</ul>
+<h2 id="2-接口的功能和组成"><a href="#2-接口的功能和组成" class="headerlink" title="2. 接口的功能和组成"></a>2. 接口的功能和组成</h2><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>组成</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>选址（确认是否为参与的设备）</td>
+<td>设备选择电路</td>
+</tr>
+<tr>
+<td>传送命令（传送主机命令）</td>
+<td>命令寄存器、命令译码器</td>
+</tr>
+<tr>
+<td>传送数据（核心）</td>
+<td>数据缓冲寄存器DBR</td>
+</tr>
+<tr>
+<td>反应设备状态</td>
+<td>设备状态标记</td>
+</tr>
+</tbody></table>
+<p>此外，接口的组成还有：</p>
+<ul>
+<li>完成触发器D（D=1表示工作完成done）</li>
+<li>工作触发器B（B=1表示正在忙busy）</li>
+<li>中断请求触发器INTR</li>
+<li>屏蔽触发器MASK</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE2YTUwNGY0YmNiMDQ1YWZiMzcucG5n?x-oss-process=image/format,png"></p>
+<blockquote>
+<p>接口$\neq$端口：</p>
+<ul>
+<li>接口：指主机与外部设备之间设置的一个硬件电路及其相应的软件控制。</li>
+<li>端口：指接口电路中的一些寄存器，这些寄存器分别用来存放数据信息、控制信息和状态信息，相应的就是数据端口、控制端口和状态端口。</li>
+<li>接口 = 端口 + 相应的控制逻辑</li>
+</ul>
+</blockquote>
+<h1 id="I-O设备与主机信息传送的控制方式"><a href="#I-O设备与主机信息传送的控制方式" class="headerlink" title="I/O设备与主机信息传送的控制方式"></a>I/O设备与主机信息传送的控制方式</h1><h2 id="1-程序查询方式"><a href="#1-程序查询方式" class="headerlink" title="1. 程序查询方式"></a>1. 程序查询方式</h2><p>程序查询方式是由CPU通过程序不断查询IO设备是否已做好准备，从而控制IO与主机交换信息。</p>
+<p>为了正确完成这种查询，通常要执行如下三条指令：</p>
+<ul>
+<li>测试指令：查询设备是否准备就绪</li>
+<li>传送指令：在设备准备就绪时，执行传送指令</li>
+<li>转移指令：若设备未准备就绪，执行转移指令，转职测试指令，继续测试设备状态</li>
+</ul>
+<h3 id="1-1-程序查询流程"><a href="#1-1-程序查询流程" class="headerlink" title="1.1 程序查询流程"></a>1.1 程序查询流程</h3><h4 id="1-1-1-单个设备查询流程"><a href="#1-1-1-单个设备查询流程" class="headerlink" title="1.1.1 单个设备查询流程"></a>1.1.1 单个设备查询流程</h4><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE2ZDUwNGY0YmNiMDQ1YWZlZTYucG5n?x-oss-process=image/format,png"></p>
+<h4 id="1-1-2-多个设备查询流程"><a href="#1-1-2-多个设备查询流程" class="headerlink" title="1.1.2 多个设备查询流程"></a>1.1.2 多个设备查询流程</h4><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTM3MTUwNGY0YmNiMDQ1ZDY5OTgucG5n?x-oss-process=image/format,png"></p>
+<p>按照优先级一一查询，哪个设备准备好了就处理哪个设备。</p>
+<h4 id="1-1-3-程序流程"><a href="#1-1-3-程序流程" class="headerlink" title="1.1.3 程序流程"></a>1.1.3 程序流程</h4><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE3MTUwNGY0YmNiMDQ1YjA0ZjQucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li>这种方式传送数据要占用CPU中的寄存器，故首先需要将寄存器中的原内容保护起来</li>
+<li>传送的往往是一批数据，因此需要设置计数值</li>
+<li>设置于传送数据在内存缓冲器中的首地址</li>
+</ul>
+<blockquote>
+<p>这种方式下，CPU和IO串行工作，在检查IO状态时，CPU处于“踏步等待”。</p>
+</blockquote>
+<h3 id="1-2-程序查询方式的接口电路"><a href="#1-2-程序查询方式的接口电路" class="headerlink" title="1.2 程序查询方式的接口电路"></a>1.2 程序查询方式的接口电路</h3><p>以输入为例：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE3NDUwNGY0YmNiMDQ1YjBiNDkucG5n?x-oss-process=image/format,png"></p>
+<ol>
+<li>CPU发出启动命令，若设备选择电路发出的SEL为1（选中），则D触发器置0，B触发器置1</li>
+<li>B为1，在忙，启动设备</li>
+<li>设备向DBR中输入数据</li>
+<li>设备输送完数据后，D置1，B置0</li>
+<li>告诉CPU设备准备就绪</li>
+<li>DBR中的数据通过数据线传输到内存中</li>
+</ol>
+<h2 id="2-程序中断方式"><a href="#2-程序中断方式" class="headerlink" title="2. 程序中断方式"></a>2. 程序中断方式</h2><h3 id="2-1-中断的产生"><a href="#2-1-中断的产生" class="headerlink" title="2.1 中断的产生"></a>2.1 中断的产生</h3><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE3ODUwNGY0YmNiMDQ1YjEyNWYucG5n?x-oss-process=image/format,png"></p>
+<p>CPU与打印机并行工作，串行传送数据。</p>
+<h3 id="2-2-程序中断方式的接口电路"><a href="#2-2-程序中断方式的接口电路" class="headerlink" title="2.2 程序中断方式的接口电路"></a>2.2 程序中断方式的接口电路</h3><h4 id="2-2-1-中断请求触发器-INTR-和中断屏蔽触发器-MASK"><a href="#2-2-1-中断请求触发器-INTR-和中断屏蔽触发器-MASK" class="headerlink" title="2.2.1 中断请求触发器(INTR)和中断屏蔽触发器(MASK)"></a>2.2.1 中断请求触发器(INTR)和中断屏蔽触发器(MASK)</h4><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE3YjUwNGY0YmNiMDQ1YjE3ZTAucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li>INTR=1：有请求</li>
+<li>MASK=1：被屏蔽</li>
+<li>在IO设备准备工作已完成（D=1）且没有被屏蔽（MASK=0）的情况下，INTR的D端被置1，在下一个CPU查询信号到来时，INTR输出1；否则输出0</li>
+</ul>
+<h4 id="2-2-2-排队器"><a href="#2-2-2-排队器" class="headerlink" title="2.2.2 排队器"></a>2.2.2 排队器</h4><p>排队器分为硬件和软件两部分，硬件在CPU内或在接口电路中（链式排队器），软件之后会学。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE4MjUwNGY0YmNiMDQ1YjFlN2IucG5n?x-oss-process=image/format,png"></p>
+<p>被选中的输出INTP<del>i</del>为1，没有被选中的都为0.</p>
+<h4 id="2-2-3-中断向量地址形成部件"><a href="#2-2-3-中断向量地址形成部件" class="headerlink" title="2.2.3 中断向量地址形成部件"></a>2.2.3 中断向量地址形成部件</h4><p>CPU响应了IO中断后，要转去执行该设备的中断服务程序，而每个中断服务程序都有不同的入口地址，CPU必须要找到这个入口地址。方法有两种：由软件产生（后面会讲）和由硬件产生（由硬件产生==向量地址==，再由向量地址找到入口地址）。<br><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE4NTUwNGY0YmNiMDQ1YjIzNDAucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li>排队器输出的数据（INTP<del>1</del>到INTP<del>n</del>组成）经过中断向量地址形成部件（其实就是设备编码器），生成一个向量地址，向量地址中存储的是一个跳转指令，会跳转到中断服务程序的入口地址。</li>
+<li><strong>向量地址实际上就是中断服务程序入口地址的地址</strong>。</li>
+</ul>
+<blockquote>
+<p><strong>中断向量地址和入口地址的区别与联系：</strong></p>
+<p>区别：向量地址是硬件电路（向量编码器）产生的中断源的内存中断向量表表项地址编号；中断入口地址是中断服务程序首址。</p>
+<p>联系：中断向量地址可以理解为中断服务程序入口地址的地址，通过它访存可获得中断服务程序入口地址。</p>
+</blockquote>
+<h4 id="2-2-4-程序中断方式接口电路的组成"><a href="#2-2-4-程序中断方式接口电路的组成" class="headerlink" title="2.2.4 程序中断方式接口电路的组成"></a>2.2.4 程序中断方式接口电路的组成</h4><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE4ODUwNGY0YmNiMDQ1YjI2NzYucG5n?x-oss-process=image/format,png"></p>
+<h3 id="2-3-I-O中断处理过程"><a href="#2-3-I-O中断处理过程" class="headerlink" title="2.3. I/O中断处理过程"></a>2.3. I/O中断处理过程</h3><h4 id="2-3-1CPU响应中断请求的条件和时间"><a href="#2-3-1CPU响应中断请求的条件和时间" class="headerlink" title="2.3.1CPU响应中断请求的条件和时间"></a>2.3.1CPU响应中断请求的条件和时间</h4><ul>
+<li>条件<ul>
+<li>CPU中的<strong>允许中断触发器</strong>EINT=1</li>
+<li>用<strong>开中断</strong>指令将EINT置1</li>
+<li>用<strong>关中断</strong>指令将EINT置0</li>
+</ul>
+</li>
+<li>时间<ul>
+<li>当D=1（随机）且MASK=0时</li>
+<li>在每条指令执行阶段结束前</li>
+<li>CPU发<strong>中断查询信号</strong>（将EINT置1）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>CPU相应IO中断请求的条件和时间是：当中断允许状态为1(EINT=1)，且至少有一个中断请求被查到，则在一条指令执行完时，响应中断。</p>
+</blockquote>
+<h4 id="2-3-2-I-O中断处理简单过程"><a href="#2-3-2-I-O中断处理简单过程" class="headerlink" title="2.3.2 I/O中断处理简单过程"></a>2.3.2 I/O中断处理简单过程</h4><ol>
+<li>中断请求</li>
+<li>中断判优：排队器</li>
+<li>中断响应</li>
+<li>中断服务</li>
+<li>中断返回</li>
+</ol>
+<h3 id="2-4-中断服务程序的流程"><a href="#2-4-中断服务程序的流程" class="headerlink" title="2.4 中断服务程序的流程"></a>2.4 中断服务程序的流程</h3><h4 id="2-4-1-中断服务程序流程"><a href="#2-4-1-中断服务程序流程" class="headerlink" title="2.4.1 中断服务程序流程"></a>2.4.1 中断服务程序流程</h4><ol>
+<li>保护现场：<ul>
+<li>程序断点的保护：中断隐指令</li>
+<li>寄存器内容的保护：进栈指令</li>
+</ul>
+</li>
+<li>中断服务</li>
+<li>恢复现场：出栈指令，将保存在存储器（或堆栈）中的信息送回到原来的寄存器中</li>
+<li>中断返回</li>
+</ol>
+<h4 id="2-4-2-单重中断"><a href="#2-4-2-单重中断" class="headerlink" title="2.4.2 单重中断"></a>2.4.2 单重中断</h4><ul>
+<li>不允许中断现行的中断服务程序</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE5MzUwNGY0YmNiMDQ1YjMwZWYucG5n?x-oss-process=image/format,png"></p>
+<h4 id="2-4-3-多重中断"><a href="#2-4-3-多重中断" class="headerlink" title="2.4.3 多重中断"></a>2.4.3 多重中断</h4><ul>
+<li>允许级别更高的中断源中断现行的中断服务程序</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE5NzUwNGY0YmNiMDQ1YjM1ZjUucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li>PC的保护和更新是由<strong>硬件自动完成的</strong></li>
+<li>CPU响应中断最先完成的步骤为<strong>关中断</strong></li>
+</ul>
+<blockquote>
+<p>宏观上，CPU和IO并行工作</p>
+<p>微观上，CPU中断现行程序为IO服务（串行）</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTE5ZDUwNGY0YmNiMDQ1YjNiZGMucG5n?x-oss-process=image/format,png"></p>
+</blockquote>
+<h2 id="3-DMA方式"><a href="#3-DMA方式" class="headerlink" title="3. DMA方式"></a>3. DMA方式</h2><h3 id="3-1-DMA与主存交换数据的三种方法"><a href="#3-1-DMA与主存交换数据的三种方法" class="headerlink" title="3.1 DMA与主存交换数据的三种方法"></a>3.1 DMA与主存交换数据的三种方法</h3><p>DMA接口和CPU共享主存，这就有可能会出现两者争用主存的冲突，为了有效地分时使用主存，DMA与主存交换数据时通常可采用如下三种方法：</p>
+<h4 id="3-1-1-停止CPU访问主存"><a href="#3-1-1-停止CPU访问主存" class="headerlink" title="3.1.1 停止CPU访问主存"></a>3.1.1 停止CPU访问主存</h4><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFhMDUwNGY0YmNiMDQ1YjNmYzMucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li>DMA接口向CPU发送停止信号，要求CPU放弃地址线、数据线和有关控制线的使用权，CPU处于不工作或保持状态</li>
+<li>优点：控制简单</li>
+<li>缺点：未充分发挥CPU对主存的利用率</li>
+</ul>
+<h4 id="3-1-2-周期挪用（周期窃取）"><a href="#3-1-2-周期挪用（周期窃取）" class="headerlink" title="3.1.2 周期挪用（周期窃取）"></a>3.1.2 周期挪用（周期窃取）</h4><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFhNDUwNGY0YmNiMDQ1YjQzZWYucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li>每次IO设备发出DMA请求时，IO设备便挪用或窃取总线占用权一个或几个<strong>访存周期</strong>，而DMA不请求时，CPU仍继续访问主存</li>
+<li>DMA优先权高于CPU，同时访存时DMA优先</li>
+<li>既实现了IO传送，又发挥了主存与CPU的效率</li>
+</ul>
+<h4 id="3-1-3-DMA与CPU交替访问"><a href="#3-1-3-DMA与CPU交替访问" class="headerlink" title="3.1.3 DMA与CPU交替访问"></a>3.1.3 DMA与CPU交替访问</h4><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFhNzUwNGY0YmNiMDQ1YjQ3MTkucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li>适用于CPU的工作周期比主存存取周期长的情况，不需要申请建立和归还总线的使用权</li>
+<li>优点：CPU既不停止主程序的运行也不进入等待状态，“透明的DMA”</li>
+<li>缺点：硬件逻辑复杂，实用性不强</li>
+</ul>
+<h3 id="3-2-DMA接口的功能和组成"><a href="#3-2-DMA接口的功能和组成" class="headerlink" title="3.2 DMA接口的功能和组成"></a>3.2 DMA接口的功能和组成</h3><h4 id="3-2-1-DMA接口功能"><a href="#3-2-1-DMA接口功能" class="headerlink" title="3.2.1 DMA接口功能"></a>3.2.1 DMA接口功能</h4><ol>
+<li>向CPU申请DMA传送</li>
+<li>处理总线控制权的转交</li>
+<li>管理系统总线、控制数据传送</li>
+<li>确定数据传送的首地址和长度，修正传送过程中的数据地址和长度</li>
+<li>DMA传送结束时，给出操作完成信号</li>
+</ol>
+<h4 id="3-2-2-DMA接口基本组成"><a href="#3-2-2-DMA接口基本组成" class="headerlink" title="3.2.2 DMA接口基本组成"></a>3.2.2 DMA接口基本组成</h4><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFhYjUwNGY0YmNiMDQ1YjRjMzgucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li>AR：存放主存地址</li>
+<li>DAR：存放设备地址，或磁盘相关</li>
+<li>WC：字计数器，记录传送了多少个字</li>
+<li>BR：数据缓冲寄存器</li>
+<li>DMA控制逻辑：控制接口内部协调工作，发出各种信号</li>
+<li>中断机构：用于DMA传送完以后，对后续工作的处理</li>
+</ul>
+<h4 id="3-2-3-DMA的工作过程"><a href="#3-2-3-DMA的工作过程" class="headerlink" title="3.2.3 DMA的工作过程"></a>3.2.3 DMA的工作过程</h4><h5 id="DMA的传送过程："><a href="#DMA的传送过程：" class="headerlink" title="DMA的传送过程："></a>DMA的传送过程：</h5><ul>
+<li>==预处理==：通过几条输入输出指令预置如下信息<ul>
+<li>通知DMA控制逻辑传送方向（输入/输出）</li>
+<li>设备地址：DMA的DAR</li>
+<li>主存地址：DMA的AR</li>
+<li>传送字数：DMA的WC</li>
+</ul>
+</li>
+<li>==数据传送==：继续执行主程序，同时完成一批数据传送</li>
+<li>==后处理==：由<strong>中断服务程序</strong>完成，做DMA结束处理<ul>
+<li>检验送入主存的数据是否正确</li>
+<li>决定是否继续用DMA传送其他数据块。若传送，对DMA接口初始化；否则停止外设</li>
+<li>测试在传送过程中是否出现错误，若出错，则转错误诊断及处理错误程序</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFhZjUwNGY0YmNiMDQ1YjUzOGMucG5n?x-oss-process=image/format,png"></p>
+<p>数据传送过程（输入）：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFiMjUwNGY0YmNiMDQ1YjU4OWEucG5n?x-oss-process=image/format,png"></p>
+<p>数据传送过程（输出）：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFiNTUwNGY0YmNiMDQ1YjVlNzUucG5n?x-oss-process=image/format,png"></p>
+<h5 id="DMA接口与系统的连接方式"><a href="#DMA接口与系统的连接方式" class="headerlink" title="DMA接口与系统的连接方式"></a>DMA接口与系统的连接方式</h5><ol>
+<li>具有公共请求线的DMA请求<img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFiOTUwNGY0YmNiMDQ1YjYxZmIucG5n?x-oss-process=image/format,png"></li>
+<li>独立的DMA请求<img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFiZDUwNGY0YmNiMDQ1YjY1NWYucG5n?x-oss-process=image/format,png"><h5 id="DMA方式与程序中断方式的比较"><a href="#DMA方式与程序中断方式的比较" class="headerlink" title="DMA方式与程序中断方式的比较"></a>DMA方式与程序中断方式的比较</h5></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>中断方式</th>
+<th>DMA方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据传送</td>
+<td>程序（中断服务程序）</td>
+<td>硬件</td>
+</tr>
+<tr>
+<td>响应时间</td>
+<td>指令执行结束</td>
+<td>存取周期结束</td>
+</tr>
+<tr>
+<td>处理异常情况</td>
+<td>能</td>
+<td>不能</td>
+</tr>
+<tr>
+<td>中断请求</td>
+<td>传送数据</td>
+<td>后处理</td>
+</tr>
+<tr>
+<td>优先级</td>
+<td>低</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<h3 id="3-3-DMA接口的类型"><a href="#3-3-DMA接口的类型" class="headerlink" title="3.3 DMA接口的类型"></a>3.3 DMA接口的类型</h3><h4 id="3-3-1-选择型"><a href="#3-3-1-选择型" class="headerlink" title="3.3.1 选择型"></a>3.3.1 选择型</h4><p>在物理上连接多个设备，在逻辑上只允许连接一个设备。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFjMDUwNGY0YmNiMDQ1YjY4ZDcucG5n?x-oss-process=image/format,png"></p>
+<h4 id="3-3-2-多路型"><a href="#3-3-2-多路型" class="headerlink" title="3.3.2 多路型"></a>3.3.2 多路型</h4><p>在物理上连接多个设备，在逻辑上允许连接多个设备同时工作</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFjNDUwNGY0YmNiMDQ1YjZkMWYucG5n?x-oss-process=image/format,png"></p>
+<h4 id="3-3-3-多路型DMA接口的工作原理"><a href="#3-3-3-多路型DMA接口的工作原理" class="headerlink" title="3.3.3 多路型DMA接口的工作原理"></a>3.3.3 多路型DMA接口的工作原理</h4><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMuZG93bmsuY2MvaXRlbS81ZThhMTFjNzUwNGY0YmNiMDQ1YjcxNzIucG5n?x-oss-process=image/format,png"></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">恰醋</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://qiacuhome.cn/2020/04/06/ji-suan-ji-zu-cheng-yuan-li-zhi-shu-ru-shu-chu-xi-tong/">https://qiacuhome.cn/2020/04/06/ji-suan-ji-zu-cheng-yuan-li-zhi-shu-ru-shu-chu-xi-tong/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">恰醋</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E7%AC%94%E8%AE%B0/">
+                                    <span class="chip bg-color">笔记</span>
+                                </a>
+                            
+                                <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">
+                                    <span class="chip bg-color">计算机组成原理</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">可以请恰醋喝一杯奶茶嘛？</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/medias/reward/wechat.jpg" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .twikoo-card {
+        margin: 1.5rem auto;
+    }
+
+    .twikoo-card .card-content {
+        padding: 20px;
+    }
+
+    #tcomments textarea {
+        box-sizing: border-box;
+        background: url("/") 100% 100% no-repeat;
+    }
+
+    #tcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #tcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #tcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #tcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #tcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #tcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #tcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #tcomments ul li {
+        list-style-type: disc;
+    }
+
+    #tcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #tcomments table,
+    th,
+    td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #tcomments table,
+    th,
+    td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n),
+    thead {
+        background-color: #fafafa;
+    }
+
+    #tcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #tcomments table td {
+        min-width: 80px;
+    }
+
+    #tcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #tcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #tcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #tcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #tcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #tcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #tcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #tcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #tcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #tcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #tcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #tcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #tcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #tcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #tcomments [type="checkbox"]:not(:checked),
+    [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #tcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #tcomments dfn {
+        font-style: italic;
+    }
+
+    #tcomments small {
+        font-size: 85%;
+    }
+
+    #tcomments cite {
+        font-style: normal;
+    }
+
+    #tcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #tcomments table,
+    th,
+    td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n),
+    thead {
+        background-color: #fafafa;
+    }
+
+    #tcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #tcomments table td {
+        min-width: 80px;
+    }
+
+    #tcomments [type="checkbox"]:not(:checked),
+    [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card twikoo-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div class="card-content" style="display: grid">
+        <div id="tcomments"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/twikoo/twikoo.all.min.js"></script>
+<script>
+    twikoo.init({
+        envId: 'qiacuhexo-7gvj04qw9c77c716',
+        el: '#tcomments',
+        region: '',
+        path: ''
+    }).then(function () {
+        var tkInputs = document.querySelector('#twikoo').getElementsByTagName('input');
+        for (var tkInputsIndex = 0; tkInputsIndex < tkInputs.length; tkInputsIndex++) {
+            if (tkInputs[tkInputsIndex]) {
+                tkInputs[tkInputsIndex].classList.add('browser-default');
+            }
+        }
+    });
+</script>
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2020/04/13/chuan-yue-sha-mo-wen-ti-qiu-jie/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/medias/featureimages/13.jpg" class="responsive-img" alt="穿越沙漠问题求解">
+                        
+                        <span class="card-title">穿越沙漠问题求解</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            问题描述一辆吉普车来到1000km宽的沙漠边沿。吉普车的耗油量为1L／km，最大装油量为500L。显然，吉普车必须用自身油箱中的油在沙漠中设几个临时加油点，否则是通不过沙漠的。假设在沙漠边沿有充足的汽油可供使用，那么吉普车应在哪些地方、建多
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-13
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                    算法
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%AE%97%E6%B3%95/">
+                        <span class="chip bg-color">算法</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/03/10/ji-suan-ji-zu-cheng-yuan-li-zhi-xi-tong-zong-xian/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/medias/featureimages/17.jpg" class="responsive-img" alt="计算机组成原理之系统总线">
+                        
+                        <span class="card-title">计算机组成原理之系统总线</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-10
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" class="post-category">
+                                    计算机组成原理
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">笔记</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">
+                        <span class="chip bg-color">计算机组成原理</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="831114100"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='list'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2020-2021</span>
+            
+            <span id="year">2020</span>
+            <a href="/about" target="_blank">恰醋</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/qiacu" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:lsheep.me@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1006208624" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1006208624" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+    <a href="https://www.zhihu.com/people/qiacuzhihu" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: https://www.zhihu.com/people/qiacuzhihu" data-position="top" data-delay="50">
+        <i class="fab fa-zhihu1">知</i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?c2e4a388ab43c368a651338e542b1db5";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/qiacu/qiacu.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
